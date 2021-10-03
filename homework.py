@@ -11,7 +11,7 @@ class Calculator:
     week_date = dt.datetime.today().date() - dt.timedelta(days=7)
     today_date = dt.date.today()
 
-    def __init__(self, limit: Union[int, float]) -> None:
+    def __init__(self, limit):
         """Конструктор класса Calculator."""
         self.limit = limit
         self.records = []
