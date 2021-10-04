@@ -23,14 +23,14 @@ class Calculator:
     def get_today_stats(self) -> Union[int, float]:
         """Считает потраченное за сегодня."""
         count: int = 0
-        return sum([count + i.amount for i in self.records
-                    if i.date == self.today_date])
+        return sum(count + i.amount for i in self.records
+                   if i.date == self.today_date)
 
     def get_week_stats(self) -> Union[int, float]:
         """Считает потраченное за неделю."""
         count: int = 0
-        return sum([count + i.amount for i in self.records
-                    if self.today_date >= i.date > self.week_date])
+        return sum(count + i.amount for i in self.records
+                   if self.today_date >= i.date > self.week_date)
 
     def get_remained(self) -> Union[int, float]:
         """Возвращает остаток на сегодня."""
@@ -50,11 +50,14 @@ class CashCalculator(Calculator):
     def get_today_cash_remained(self, currency: str) -> str:
         """Определяет, сколько ещё денег можно потратить сегодня в
         рублях, долларах или евро."""
-        value, rate = self.currency_dict[currency]
-        money: Union[int, float] = abs(self.get_remained() / rate)
-        if self.get_remained() == 0:
+        if currency not in self.currency_dict:
+            raise ValueError('Валюта не поддерживается')
+        remained = self.get_remained()
+        if not remained:
             return 'Денег нет, держись'
-        elif self.get_remained() > 0:
+        value, rate = self.currency_dict[currency]
+        money: Union[int, float] = abs(remained / rate)
+        if remained > 0:
             return f'На сегодня осталось {money:.2f} {value}'
         else:
             return f'Денег нет, держись: твой долг - {money:.2f} {value}'
